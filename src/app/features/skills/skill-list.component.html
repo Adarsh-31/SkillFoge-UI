@@ -1,0 +1,20 @@
+<button mat-raised-button color="primary" (click)="openCreateDialog()">
+  + Add Skill
+</button>
+
+<div *ngFor="let skill of skills" class="skill-card">
+  <mat-card>
+    <mat-card-title>{{ skill.name }}</mat-card-title>
+    <mat-card-content>
+      <p>{{ skill.description }}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button color="primary" (click)="openEditDialog(skill)">
+        Edit
+      </button>
+      <button mat-button color="warn" (click)="deleteSkill(skill.id)">
+        Delete
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
