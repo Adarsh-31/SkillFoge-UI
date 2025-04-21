@@ -5,6 +5,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { RegisterComponent } from './features/auth/register.component';
 import { CourseFormComponent } from './features/courses/course-form.component';
 import { SkillListComponent } from './features/skills/skill-list.component';
+import { UserListComponent } from './features/users/user-list.component';
 
 export const routes: Routes = [
   {
@@ -38,6 +39,11 @@ export const routes: Routes = [
   {
     path: 'skills',
     component: SkillListComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'users',
+    component: UserListComponent,
     canActivate: [authGuard],
   },
   {

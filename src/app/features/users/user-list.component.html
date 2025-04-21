@@ -1,1 +1,20 @@
-<p>user-list works!</p>
+<button mat-raised-button color="primary" (click)="openCreateDialog()">
+  + Add User
+</button>
+<div *ngFor="let user of users" class="user-card">
+  <mat-card>
+    <mat-card-title>{{ user.fullName }}</mat-card-title>
+    <mat-card-subtitle>{{ user.email }}</mat-card-subtitle>
+    <mat-card-content>
+      <p><strong>Role:</strong>{{ user.role }}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button color="warn" (click)="openEditDialog(user)">
+        Edit
+      </button>
+      <button mat-button color="warn" (click)="deleteUser(user.id)">
+        Delete
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
