@@ -6,11 +6,14 @@ import { RegisterComponent } from './features/auth/register.component';
 import { CourseFormComponent } from './features/courses/course-form.component';
 import { SkillListComponent } from './features/skills/skill-list.component';
 import { UserListComponent } from './features/users/user-list.component';
+import { guestGuard } from './core/guards/guest.guard';
+import { ProfileComponent } from './features/profile/profile.component';
 
 export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+    canActivate: [guestGuard],
   },
   {
     path: 'courses',
@@ -20,6 +23,7 @@ export const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
+    canActivate: [guestGuard],
   },
   {
     path: '',
@@ -44,6 +48,11 @@ export const routes: Routes = [
   {
     path: 'users',
     component: UserListComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
     canActivate: [authGuard],
   },
   {

@@ -3,17 +3,17 @@
 </h2>
 
 <form [formGroup]="form" (ngSubmit)="submit()" class="form-container">
-  <mat-form-field class="full-width" appearance="outline">
+  <mat-form-field class="full-width" appearance="outline" floatLabel="always">
     <mat-label>Full Name</mat-label>
     <input matInput formControlName="fullName" />
   </mat-form-field>
 
-  <mat-form-field class="full-width" appearance="outline">
+  <mat-form-field class="full-width" appearance="outline" floatLabel="always">
     <mat-label>Email</mat-label>
     <input matInput formControlName="email" />
   </mat-form-field>
 
-  <mat-form-field class="full-width" appearance="outline">
+  <mat-form-field class="full-width" appearance="outline" floatLabel="always">
     <mat-label>Role</mat-label>
     <mat-select matInput formControlName="role">
       <mat-option value="Admin">Admin</mat-option>
