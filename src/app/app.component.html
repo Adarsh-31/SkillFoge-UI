@@ -1,9 +1,7 @@
 <mat-toolbar>
-    <div *ngIf="isLoggedIn">
-        <Button variant="outlined" color="error" (click)="logout()">
-            Logout
-        </Button>
-    </div>
+  <nav *ngIf="isLoggedIn">
+    <button (click)="logout()">Logout</button>
+  </nav>
 </mat-toolbar>
 
 <router-outlet></router-outlet>

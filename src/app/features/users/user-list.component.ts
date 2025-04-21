@@ -106,6 +106,7 @@ export class UserListComponent implements OnInit {
     if (!confirm('Are your sure you want to delete this user?')) return;
     this.userService.deleteUser(userId).subscribe({
       next: () => {
+        this.users = this.users.filter((user) => user.id !== userId);
         this.snackbar.open('User Deleted', 'Close', { duration: 3000 });
       },
       error: () => {
