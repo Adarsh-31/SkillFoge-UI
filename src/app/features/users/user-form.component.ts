@@ -44,6 +44,7 @@ export class UserFormComponent implements OnInit {
       mode: 'create' | 'edit';
       user?: User;
       currentUserId: string;
+      currentUserRole: string;
     }
   ) {
     this.form = this.fb.group({
@@ -68,7 +69,10 @@ export class UserFormComponent implements OnInit {
       this.form.get('password')?.disable();
     }
 
-    if (this.isSelfEdit) {
+    const isNotAdmin = this.data.currentUserRole !== 'Admin';
+    const isSelfEdit = this.isSelfEdit;
+
+    if (isNotAdmin) {
       this.form.get('role')?.disable();
     }
   }

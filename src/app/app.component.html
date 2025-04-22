@@ -1,7 +1,7 @@
-<mat-toolbar>
-  <nav *ngIf="isLoggedIn">
-    <button (click)="logout()">Logout</button>
-  </nav>
+<mat-toolbar *ngIf="isLoggedIn">
+  <span class="spacer"></span>
+  <button mat-raised-button (click)="logout()">Logout</button>
+  <a mat-button *ngIf="isAdmin" [routerLink]="['/users']">Manage Users</a>
 </mat-toolbar>
 
 <router-outlet></router-outlet>

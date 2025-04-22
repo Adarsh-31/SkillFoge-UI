@@ -1,6 +1,12 @@
 <button mat-raised-button color="primary" (click)="openCreateDialog()">
   + Add User
 </button>
+
+<mat-form-field appearance="outline" class="full-width">
+  <mat-label>Search Users</mat-label>
+  <input matInput #searchInput (input)="onSearchChange(searchInput.value)" />
+</mat-form-field>
+
 <div *ngFor="let user of users" class="user-card">
   <mat-card>
     <mat-card-title>{{ user.fullName }}</mat-card-title>
@@ -18,3 +24,12 @@
     </mat-card-actions>
   </mat-card>
 </div>
+
+<mat-paginator
+  [length]="totalUsers"
+  [pageSize]="pageSize"
+  [pageIndex]="pageIndex"
+  [pageSizeOptions]="[5, 10, 25]"
+  (page)="onPageChange($event)"
+>
+</mat-paginator>
