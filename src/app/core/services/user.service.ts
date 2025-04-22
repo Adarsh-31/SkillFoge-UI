@@ -11,8 +11,19 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl);
+  getAllUsers(
+    search: string = '',
+    page: number = 1,
+    size: number = 10
+  ): Observable<{ items: User[]; totalCount: number }> {
+    const params = {
+      search,
+      page: page.toString(),
+      size: size.toString(),
+    };
+    return this.http.get<{ items: User[]; totalCount: number }>(this.apiUrl, {
+      params,
+    });
   }
 
   getUserById(id: string): Observable<User> {

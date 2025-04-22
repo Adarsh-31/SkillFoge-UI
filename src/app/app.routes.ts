@@ -8,6 +8,8 @@ import { SkillListComponent } from './features/skills/skill-list.component';
 import { UserListComponent } from './features/users/user-list.component';
 import { guestGuard } from './core/guards/guest.guard';
 import { ProfileComponent } from './features/profile/profile.component';
+import { ChangePasswordComponent } from './features/profile/change-password.component';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -48,6 +50,11 @@ export const routes: Routes = [
   {
     path: 'users',
     component: UserListComponent,
+    canActivate: [authGuard, adminGuard],
+  },
+  {
+    path: 'change-password',
+    component: ChangePasswordComponent,
     canActivate: [authGuard],
   },
   {
@@ -55,6 +62,7 @@ export const routes: Routes = [
     component: ProfileComponent,
     canActivate: [authGuard],
   },
+
   {
     path: '**',
     redirectTo: 'login',
