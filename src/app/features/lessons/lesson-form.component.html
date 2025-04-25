@@ -1,0 +1,67 @@
+<h2 mat-dialog-title>{{ isEditMode ? "Edit Lesson" : "Add Lesson" }}</h2>
+
+<form
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  class="form-container"
+  style="max-height: 80vh; overflow-y: auto; padding-bottom: 1rem"
+>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Title</mat-label>
+    <input matInput formControlName="title" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Lesson Content (Markdown)</mat-label>
+    <textarea
+      matInput
+      formControlName="content"
+      rows="6"
+      placeholder="Write Markdown here... (e.g., **bold**, # Heading)"
+    ></textarea>
+  </mat-form-field>
+
+  <h3>Live Preview</h3>
+  <div
+    style="
+      border: 1px solid #ccc;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      max-height: 300px;
+      overflow-y: auto;
+    "
+  >
+    <markdown [data]="form.get('content')?.value || ''"></markdown>
+  </div>
+
+  <details style="margin-bottom: 1rem">
+    <summary style="cursor: pointer">
+      📝 Markdown Syntax Help (Click to Expand)
+    </summary>
+    <markdown>
+      # Heading 1 ## Heading 2 **bold**, _italic_, ~~strikethrough~~ - Bullet
+      list 1. Numbered list `inline code` ``` Code block ``` [Link to
+      example](https://example.com)
+    </markdown>
+  </details>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Video URL</mat-label>
+    <input matInput formControlName="videoUrl" />
+  </mat-form-field>
+
+  <div
+    class="button-row"
+    style="
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 1rem;
+    "
+  >
+    <button mat-raised-button color="primary" type="submit">
+      {{ isEditMode ? "Update" : "Create" }}
+    </button>
+    <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
+  </div>
+</form>

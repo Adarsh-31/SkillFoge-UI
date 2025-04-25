@@ -1,0 +1,41 @@
+<h2>Lessons</h2>
+
+<button mat-raised-button color="primary" (click)="openCreateDialog()">
+  + Add Lesson
+</button>
+
+<mat-card *ngFor="let lesson of lessons" style="margin-top: 1rem">
+  <mat-card-title>{{ lesson.title }}</mat-card-title>
+  <mat-card-content>
+    <markdown *ngIf="lesson.content" [data]="lesson.content"></markdown>
+    <div *ngIf="lesson.videoUrl">
+      <iframe
+        width="100%"
+        height="315"
+        [src]="sanitizeUrl(lesson.videoUrl)"
+        [frameBorder]="0"
+        allowfullscreen
+      ></iframe>
+      <div *ngIf="lesson.videoUrl" style="margin-top: 0.5rem">
+        <a
+          mat-button
+          color="accent"
+          [href]="getOriginalYoutubeUrl(lesson.videoUrl)"
+          target="_blank"
+          rel="noopener noreferrer"
+          matTooltip="Open this video on YouTube in a new tab"
+        >
+          🎬 Open in YouTube
+        </a>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button color="primary" (click)="openEditDialog(lesson)">
+      Edit
+    </button>
+    <button mat-button color="warn" (click)="deleteLesson(lesson.id)">
+      Delete
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -3,13 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { CourseService } from '../../core/services/course.service';
 import { Course } from '../../core/models/course.model';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-course-list',
   standalone: true,
-  imports: [CommonModule, MatCardModule],
+  imports: [CommonModule, MatCardModule, RouterModule],
   templateUrl: './course-list.component.html',
   styleUrl: './course-list.component.scss',
 })
