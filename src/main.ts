@@ -8,14 +8,14 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { importProvidersFrom } from '@angular/core';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { AuthInterceptor } from './app/core/interceptors/auth.interceptor';
-
-
+import { MarkdownModule } from 'ngx-markdown';
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
     provideAnimations(),
     provideHttpClient(withInterceptors([AuthInterceptor])),
-    importProvidersFrom(MatSnackBarModule)
-  ]
-})
+    importProvidersFrom(MatSnackBarModule),
+    importProvidersFrom(MarkdownModule.forRoot()),
+  ],
+});

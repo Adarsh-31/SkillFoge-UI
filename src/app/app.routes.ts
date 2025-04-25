@@ -10,6 +10,8 @@ import { guestGuard } from './core/guards/guest.guard';
 import { ProfileComponent } from './features/profile/profile.component';
 import { ChangePasswordComponent } from './features/profile/change-password.component';
 import { adminGuard } from './core/guards/admin.guard';
+import { ModuleListComponent } from './features/modules/module-list.component';
+import { LessonListComponent } from './features/lessons/lesson-list.component';
 
 export const routes: Routes = [
   {
@@ -62,7 +64,16 @@ export const routes: Routes = [
     component: ProfileComponent,
     canActivate: [authGuard],
   },
-
+  {
+    path: 'courses/:courseId/modules',
+    component: ModuleListComponent,
+    canActivate: [authGuard, adminGuard],
+  },
+  {
+    path: 'modules/:moduleId/lessons',
+    component: LessonListComponent,
+    canActivate: [authGuard, adminGuard], // 🔒 restrict to admins
+  },
   {
     path: '**',
     redirectTo: 'login',
