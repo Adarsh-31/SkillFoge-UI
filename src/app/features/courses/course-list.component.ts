@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { CourseService } from '../../core/services/course.service';
+import { AuthService } from '../../core/services/auth.service';
+import { UserCourseService } from '../../core/services/user-course.service';
 import { Course } from '../../core/models/course.model';
 import { Router, RouterModule } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -19,7 +21,9 @@ export class CourseListComponent implements OnInit {
   constructor(
     private courseService: CourseService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService: AuthService,
+    private userCourseService: UserCourseService
   ) {}
 
   ngOnInit(): void {
@@ -56,5 +60,27 @@ export class CourseListComponent implements OnInit {
         },
       });
     }
+  }
+
+  get IsAdmin(): boolean {
+    const token = this.authService.getToken();
+    if (!token) return false;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return (
+        payload[
+          'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+        ] == 'Admin'
+      );
+    } catch {
+      return false;
+    }
+  }
+
+  enroll(courseId: string): void {
+    this.userCourseService.enroll(courseId).subscribe(() => {
+      this.snackBar.open('Enrolled successfully!', 'Close', { duration: 3000 });
+    });
   }
 }
