@@ -15,6 +15,12 @@
       <button mat-button [routerLink]="['/courses', course.id, 'modules']">
         Manage Modules
       </button>
+      <button
+        *ngIf="!IsAdmin"
+        mat-raised-button
+        color="primary"
+        (click)="enroll(course.id)"
+      ></button>
     </mat-card-actions>
   </mat-card>
 </div>
