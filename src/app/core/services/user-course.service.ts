@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Course } from '../models/course.model';
 
@@ -10,11 +10,17 @@ export class UserCourseService {
   constructor(private http: HttpClient) {}
 
   enroll(courseId: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/enroll`, courseId);
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post(`${this.apiUrl}/enroll`, { courseId }, { headers });
   }
 
   unenroll(courseId: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/unenroll`, courseId);
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<any>(
+      `${this.apiUrl}/unenroll`,
+      { courseId },
+      { headers }
+    );
   }
 
   getMyCourses(): Observable<Course[]> {

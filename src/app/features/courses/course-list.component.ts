@@ -17,6 +17,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class CourseListComponent implements OnInit {
   courses: Course[] = [];
+  isAdmin = false;
 
   constructor(
     private courseService: CourseService,
@@ -27,6 +28,7 @@ export class CourseListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isAdmin = this.authService.isAdmin();
     this.courseService.getAllCourses().subscribe({
       next: (courses) => {
         this.courses = courses;
@@ -61,23 +63,6 @@ export class CourseListComponent implements OnInit {
       });
     }
   }
-
-  get IsAdmin(): boolean {
-    const token = this.authService.getToken();
-    if (!token) return false;
-
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return (
-        payload[
-          'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
-        ] == 'Admin'
-      );
-    } catch {
-      return false;
-    }
-  }
-
   enroll(courseId: string): void {
     this.userCourseService.enroll(courseId).subscribe(() => {
       this.snackBar.open('Enrolled successfully!', 'Close', { duration: 3000 });

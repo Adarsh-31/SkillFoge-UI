@@ -12,6 +12,9 @@ import { ChangePasswordComponent } from './features/profile/change-password.comp
 import { adminGuard } from './core/guards/admin.guard';
 import { ModuleListComponent } from './features/modules/module-list.component';
 import { LessonListComponent } from './features/lessons/lesson-list.component';
+import { MyCoursesComponent } from './features/courses/my-courses.component';
+import { CourseDetailsComponent } from './features/courses/course-details.component';
+import { LessonDetailsComponent } from './features/lessons/lesson-details.component';
 
 export const routes: Routes = [
   {
@@ -73,6 +76,21 @@ export const routes: Routes = [
     path: 'modules/:moduleId/lessons',
     component: LessonListComponent,
     canActivate: [authGuard, adminGuard], // 🔒 restrict to admins
+  },
+  {
+    path: 'my-courses',
+    component: MyCoursesComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'courses/:courseId/details',
+    component: CourseDetailsComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'lessons/:lessonId/details',
+    component: LessonDetailsComponent,
+    canActivate: [authGuard],
   },
   {
     path: '**',
