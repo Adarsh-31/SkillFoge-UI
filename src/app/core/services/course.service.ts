@@ -30,4 +30,8 @@ export class CourseService {
   deleteCourse(courseId: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${courseId}`);
   }
+
+  getCourseById(courseId: string): Observable<Course> {
+    return this.http.get<Course>(`${this.apiUrl}/${courseId}`);
+  }
 }

@@ -1,0 +1,32 @@
+<mat-card *ngIf="lesson">
+  <mat-card-title>{{ lesson.title }}</mat-card-title>
+
+  <mat-card-content>
+    <markdown *ngIf="lesson.content" [data]="lesson.content"></markdown>
+
+    <div *ngIf="safeVideoUrl" style="margin-top: 1rem">
+      <iframe
+        width="100%"
+        height="400"
+        [src]="safeVideoUrl"
+        frameborder="0"
+        allowfullscreen
+      >
+      </iframe>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions style="margin-top: 1rem">
+    <button
+      mat-raised-button
+      color="primary"
+      *ngIf="!isCompleted"
+      (click)="markCompleted()"
+    >
+      ✅ Mark as Completed
+    </button>
+    <span *ngIf="isCompleted" style="color: green; font-weight: bold">
+      🎉 Lesson Completed!
+    </span>
+  </mat-card-actions>
+</mat-card>

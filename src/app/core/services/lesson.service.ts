@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, retry } from 'rxjs';
 
 export interface Lesson {
   id: string;
@@ -30,5 +30,9 @@ export class LessonService {
 
   deleteLesson(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  getLessonById(id: string): Observable<Lesson> {
+    return this.http.get<Lesson>(`${this.apiUrl}/${id}`);
   }
 }

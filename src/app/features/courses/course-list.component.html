@@ -6,21 +6,45 @@
     </mat-card-content>
 
     <mat-card-actions>
-      <button mat-button color="primary" (click)="editCourse(course.id)">
+      <button
+        *ngIf="isAdmin"
+        mat-button
+        color="primary"
+        (click)="editCourse(course.id)"
+      >
         Edit
       </button>
-      <button mat-button color="warn" (click)="deleteCourse(course.id)">
+
+      <button
+        *ngIf="isAdmin"
+        mat-button
+        color="warn"
+        (click)="deleteCourse(course.id)"
+      >
         Delete
       </button>
-      <button mat-button [routerLink]="['/courses', course.id, 'modules']">
+      <button
+        *ngIf="isAdmin"
+        mat-button
+        [routerLink]="['/courses', course.id, 'modules']"
+      >
         Manage Modules
       </button>
       <button
-        *ngIf="!IsAdmin"
+        mat-button
+        color="primary"
+        [routerLink]="['/courses', course.id, 'details']"
+      >
+        View Course
+      </button>
+      <button
+        *ngIf="!isAdmin"
         mat-raised-button
         color="primary"
         (click)="enroll(course.id)"
-      ></button>
+      >
+        Enroll
+      </button>
     </mat-card-actions>
   </mat-card>
 </div>

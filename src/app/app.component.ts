@@ -21,8 +21,10 @@ import { CommonModule } from '@angular/common';
 export class AppComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
   title = 'skillforge';
+  isAdmin: boolean = false;
 
   ngOnInit(): void {
+    this.isAdmin = this.authService.isAdmin();
     setInterval(() => {
       if (this.authService.isTokenExpired()) {
         this.authService.logout();
@@ -38,21 +40,5 @@ export class AppComponent implements OnInit {
 
   get isLoggedIn(): boolean {
     return !this.authService.isTokenExpired();
-  }
-
-  get isAdmin(): boolean {
-    const token = this.authService.getToken();
-    if (!token) return false;
-
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return (
-        payload[
-          'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
-        ] === 'Admin'
-      );
-    } catch {
-      return false;
-    }
   }
 }
