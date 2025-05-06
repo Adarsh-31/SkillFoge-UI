@@ -12,6 +12,15 @@
       }}</mat-option>
     </mat-select>
   </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Tags</mat-label>
+    <mat-select multiple [(value)]="selectedTagIds" placeholder="Select tags">
+      <mat-option *ngFor="let tag of allTags" [value]="tag.id">
+        {{ tag.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <button mat-raised-button color="primary" type="submit">
     {{ isEditMode ? "Update Course" : "Create Course" }}
   </button>

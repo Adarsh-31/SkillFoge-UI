@@ -18,6 +18,8 @@ import { SkillService } from '../../core/services/skill.service';
 import { Skill } from '../../core/models/skill.model';
 import { CourseSkillsService } from '../../core/services/course-skill.service';
 import { CourseWithSkills } from '../../core/models/course-with-skills.model';
+import { Tag } from '../../core/models/tag.model';
+import { TagService } from '../../core/services/tag.service';
 
 @Component({
   selector: 'app-course-form',
@@ -38,6 +40,8 @@ export class CourseFormComponent implements OnInit {
   skills: Skill[] = [];
   isEditMode: boolean = false;
   courseId: string | null = null;
+  allTags: Tag[] = [];
+  selectedTagIds: string[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -46,7 +50,8 @@ export class CourseFormComponent implements OnInit {
     private skillService: SkillService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private courseSkillService: CourseSkillsService
+    private courseSkillService: CourseSkillsService,
+    private tagService: TagService
   ) {
     this.form = this.fb.group({
       title: ['', Validators.required],
@@ -59,6 +64,9 @@ export class CourseFormComponent implements OnInit {
     this.courseId = this.route.snapshot.paramMap.get('id');
     this.isEditMode = !!this.courseId;
     this.loadSkills();
+    this.tagService.getAllTags().subscribe({
+      next: (tags) => (this.allTags = tags),
+    });
 
     if (this.isEditMode) {
       this.courseSkillService.getCourseWithSkills(this.courseId!).subscribe({
@@ -77,6 +85,11 @@ export class CourseFormComponent implements OnInit {
         },
       });
     }
+    this.tagService.getTagsByCourse(this.courseId!).subscribe({
+      next: (tags) => {
+        this.selectedTagIds = tags.map((tag) => tag.id);
+      },
+    });
   }
 
   loadSkills(): void {
@@ -101,7 +114,10 @@ export class CourseFormComponent implements OnInit {
       this.courseService
         .updateCourse(this.courseId, { title, description })
         .subscribe({
-          next: () => this.assignSkills(this.courseId!, skillIds),
+          next: () => {
+            this.assignSkills(this.courseId!, skillIds);
+            this.assignTags(this.courseId!, this.selectedTagIds);
+          },
           error: () =>
             this.snackBar.open('Failed to update course.', 'Close', {
               duration: 3000,
@@ -109,7 +125,10 @@ export class CourseFormComponent implements OnInit {
         });
     } else {
       this.courseService.createCourse({ title, description }).subscribe({
-        next: (res) => this.assignSkills(res.id, skillIds),
+        next: (res) => {
+          this.assignSkills(res.id, skillIds);
+          this.assignTags(res.id, this.selectedTagIds);
+        },
         error: () =>
           this.snackBar.open('Failed to create course.', 'Close', {
             duration: 3000,
@@ -132,6 +151,19 @@ export class CourseFormComponent implements OnInit {
         this.snackBar.open('Failed to assign skills.', 'Close', {
           duration: 3000,
         }),
+    });
+  }
+
+  private assignTags(courseId: string, tagIds: string[]): void {
+    this.tagService.assignTagsToCourse(courseId, tagIds).subscribe({
+      next: () => {
+        console.log('Tags assigned successfully!');
+      },
+      error: () => {
+        this.snackBar.open('Failed to assign tags.', 'Close', {
+          duration: 3000,
+        });
+      },
     });
   }
 }

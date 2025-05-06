@@ -33,6 +33,7 @@ export class CourseDetailsComponent implements OnInit {
   modules: Module[] = [];
   lessonsMap: { [moduleId: string]: Lesson[] } = {};
   isLoading = true;
+  relatedCourses: Course[] = [];
 
   courseId = '';
 
@@ -92,6 +93,7 @@ export class CourseDetailsComponent implements OnInit {
         this.isLoading = false;
       },
     });
+    this.loadRelatedCourses();
   }
 
   loadCompletedLessons(): void {
@@ -123,6 +125,13 @@ export class CourseDetailsComponent implements OnInit {
       setTimeout(() => {
         this.ngZone.run(() => this.router.navigate(['/my-courses']));
       }, 3000);
+    });
+  }
+
+  loadRelatedCourses(): void {
+    this.courseService.getRelatedCourses(this.courseId).subscribe({
+      next: (courses) => (this.relatedCourses = courses),
+      error: () => console.warn('Failed to load related courses'),
     });
   }
 }
