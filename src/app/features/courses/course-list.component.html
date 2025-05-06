@@ -1,8 +1,33 @@
+<mat-form-field appearance="outline" class="full-width">
+  <mat-label>Filter by Tag</mat-label>
+  <mat-select
+    [(value)]="selectedTagId"
+    (selectionChange)="filterCoursesByTag()"
+  >
+    <mat-option value="">All Courses</mat-option>
+    <mat-option *ngFor="let tag of tags" [value]="tag.id">
+      {{ tag.name }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
 <div *ngFor="let course of courses" style="margin: 1rem 0">
   <mat-card class="example-card" appearance="outlined">
     <mat-card-title>{{ course.title }}</mat-card-title>
     <mat-card-content>
       <p>{{ course.description }}</p>
+      <mat-chip-listbox *ngIf="course.tags?.length" aria-label="Course Tags">
+        <mat-chip
+          *ngFor="let tag of course.tags"
+          color="accent"
+          selected
+          (click)="filterByClickedTag(tag.id)"
+          style="cursor: pointer"
+          matTooltip="Filter by this tag"
+        >
+          {{ tag.name }}
+        </mat-chip>
+      </mat-chip-listbox>
     </mat-card-content>
 
     <mat-card-actions>
