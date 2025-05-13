@@ -12,6 +12,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { FormControl } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatIconModule } from '@angular/material/icon';
 
 import { CourseService } from '../../core/services/course.service';
 import { SkillService } from '../../core/services/skill.service';
@@ -31,6 +36,9 @@ import { TagService } from '../../core/services/tag.service';
     MatButtonModule,
     MatSelectModule,
     MatSnackBarModule,
+    MatChipsModule,
+    MatAutocompleteModule,
+    MatIconModule,
   ],
   templateUrl: './course-form.component.html',
   styleUrl: './course-form.component.scss',
@@ -42,6 +50,11 @@ export class CourseFormComponent implements OnInit {
   courseId: string | null = null;
   allTags: Tag[] = [];
   selectedTagIds: string[] = [];
+  tagControl = new FormControl('');
+  selectedTags: Tag[] = [];
+  filteredTags: Tag[] = [];
+
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
   constructor(
     private fb: FormBuilder,
@@ -65,7 +78,10 @@ export class CourseFormComponent implements OnInit {
     this.isEditMode = !!this.courseId;
     this.loadSkills();
     this.tagService.getAllTags().subscribe({
-      next: (tags) => (this.allTags = tags),
+      next: (tags) => {
+        this.allTags = tags;
+        this.filteredTags = tags;
+      },
     });
 
     if (this.isEditMode) {
@@ -84,11 +100,22 @@ export class CourseFormComponent implements OnInit {
           this.router.navigate(['/courses']);
         },
       });
+
+      this.tagService.getTagsByCourse(this.courseId!).subscribe({
+        next: (tags) => {
+          this.selectedTags = tags;
+          this.selectedTagIds = tags.map((tag) => tag.id);
+        },
+      });
     }
-    this.tagService.getTagsByCourse(this.courseId!).subscribe({
-      next: (tags) => {
-        this.selectedTagIds = tags.map((tag) => tag.id);
-      },
+
+    this.tagControl.valueChanges.subscribe((value) => {
+      const input = value?.toLowerCase() || '';
+      this.filteredTags = this.allTags.filter(
+        (tag) =>
+          tag.name.toLowerCase().includes(input) &&
+          !this.selectedTags.find((t) => t.id === tag.id)
+      );
     });
   }
 
@@ -135,6 +162,28 @@ export class CourseFormComponent implements OnInit {
           }),
       });
     }
+  }
+
+  selectTag(tag: Tag): void {
+    if (!this.selectedTags.find((t) => t.id === tag.id)) {
+      this.selectedTags.push(tag);
+      this.selectedTagIds.push(tag.id);
+      this.tagControl.setValue('');
+    }
+  }
+
+  removeTag(tag: Tag): void {
+    this.selectedTags = this.selectedTags.filter((t) => t.id !== tag.id);
+    this.selectedTagIds = this.selectedTagIds.filter((id) => id !== tag.id);
+  }
+
+  addTagFromInput(event: any): void {
+    const inputValue = (event.value || '').trim().toLowerCase();
+    const match = this.allTags.find((t) => t.name.toLowerCase() === inputValue);
+    if (match && !this.selectedTags.find((t) => t.id === match.id)) {
+      this.selectTag(match);
+    }
+    event.chipInput?.clear();
   }
 
   private assignSkills(courseId: string, skillIds: string[]): void {
