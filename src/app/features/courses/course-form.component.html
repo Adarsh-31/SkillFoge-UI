@@ -14,11 +14,37 @@
   </mat-form-field>
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>Tags</mat-label>
-    <mat-select multiple [(value)]="selectedTagIds" placeholder="Select tags">
-      <mat-option *ngFor="let tag of allTags" [value]="tag.id">
+    <mat-chip-grid #chipGrid>
+      <mat-chip-row
+        *ngFor="let tag of selectedTags"
+        color="accent"
+        [value]="tag.id"
+        (removed)="removeTag(tag)"
+      >
+        {{ tag.name }}
+        <button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip-row>
+
+      <input
+        placeholder="Add tag"
+        [formControl]="tagControl"
+        [matChipInputFor]="chipGrid"
+        [matAutocomplete]="auto"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="addTagFromInput($event)"
+      />
+    </mat-chip-grid>
+
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="selectTag($event.option.value)"
+    >
+      <mat-option *ngFor="let tag of filteredTags" [value]="tag">
         {{ tag.name }}
       </mat-option>
-    </mat-select>
+    </mat-autocomplete>
   </mat-form-field>
 
   <button mat-raised-button color="primary" type="submit">
